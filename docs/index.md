@@ -4,22 +4,22 @@ layout: home
 
 hero:
   name: "Homelab compose stacks"
-  text: "A collection of compose stack for usage in homelabs with usefull services and their corresponding configuration."
-  tagline: My great project tagline
+  text: "A collection of compose stack for usage in homelabs."
+  tagline: Have a look - maybe you will find something to deploy.
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: Where to start
+      link: /getting-started
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: Disclaimer
+      link: /disclaimer
 
 features:
-  - title: Feature A
+  - title: Stack A
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
+  - title: Stack B
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
+  - title: Stack C
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ---
 

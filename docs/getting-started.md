@@ -7,8 +7,7 @@ outline: deep
 
 This repository contains a collection of Docker Compose stacks intended for homelab usage.
 
-Each directory represents **one stack**.  
-A stack may consist of:
+Each directory represents **one stack**. A stack may consist of:
 - a single application, or
 - multiple services that logically belong together (e.g. app + database + reverse proxy).
 
@@ -45,43 +44,16 @@ A typical structure looks like this:
 └─ ...
 ```
 
-- Each folder = one deployable stack.
-- Configuration examples are provided where useful.
-- You are expected to adapt environment variables and configs to your setup.
+Each folder represents one deployable stack. Configuration needed for running services are provided where useful, but you are expected to adapt environement variables and configs yourself.
 
 
 ## Basic Usage
 
-1. Clone the repository:
+Well, there are many possibilities to use these compose scripts. Here are some examples:
 
-```bash
-git clone <your-repo-url>
-cd <repo-name>
-````
-
-2. Navigate to the desired stack:
-
-```bash
-cd stack-a
-```
-
-3. Copy and adjust environment variables if required:
-
-```bash
-cp .env.example .env
-```
-
-4. Start the stack:
-
-```bash
-docker compose up -d
-```
-
-5. Verify logs if necessary:
-
-```bash
-docker compose logs -f
-```
+::: info Usage via shell
+Clone or copy the scripts and corresponding config files and start them via your favorite container engine.
+:::
 
 ::: info Usage in portainer
 Or use portainer, where you can directly refernce these compose-files.
@@ -90,27 +62,19 @@ Or use portainer, where you can directly refernce these compose-files.
 
 ## Naming & Conventions
 
-The stacks intentionally use generic `compose.yml` filenames.
-You may:
-
-* keep them as-is and run from within the directory
-* rename them if integrating into an existing infrastructure
-* merge them into a larger compose setup if needed
-
+The stacks intentionally use generic `compose.yml` filenames. You may keep them as-is, rename them if integrating into an existing infrastructure or merge them into larger compose setups if needed.
 The repository does not enforce a specific deployment pattern.
 
 
 ## Homelab Philosophy
 
 These stacks are designed for:
-
 * experimentation
 * learning
 * self-hosted services
 * small-scale personal environments
 
-They are intentionally pragmatic.
-If something needs to be adapted for your network, hardware, or reverse proxy setup — adjust it.
+They are intentionally pragmatic. If something needs to be adapted for your network, hardware, or reverse proxy setup ... adjust it.
 
 Homelabs differ widely. There is no universal configuration.
 

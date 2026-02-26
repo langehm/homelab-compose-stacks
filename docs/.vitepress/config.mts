@@ -4,7 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   base: '/homelab-compose-stacks/',
   title: "Homelab compose stacks",
-  description: "A collection of compose stack for usage in homelabs with usefull services and their corresponding configuration.",
+  description: "A collection of compose stack for usage in homelabs with useful services and their corresponding configuration.",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [

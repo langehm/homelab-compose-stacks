@@ -1,0 +1,12 @@
+services:
+  acme-sh:
+    image: neilpang/acme.sh:latest
+    container_name: acme-sh
+    restart: unless-stopped
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    volumes:
+      - /volume2/docker/acme/config:/acme.sh
+    env_file:
+      - /env/acme.env
+    command: daemon

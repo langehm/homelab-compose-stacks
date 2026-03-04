@@ -13,13 +13,14 @@ hero:
     - theme: alt
       text: Disclaimer
       link: /disclaimer
+    - theme: alt
+      text: Stacks
+      link: /stacks
 
 features:
-  - title: Stack A
+  - title: Synology acme script
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Stack B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Stack C
+  - title: Homarr Dashboard
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ---
 

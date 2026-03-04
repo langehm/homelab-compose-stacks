@@ -9,7 +9,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' }
+      { text: 'Stacks', link: '/stacks'}
     ],
 
     sidebar: [
@@ -18,6 +18,13 @@ export default defineConfig({
         items: [
           { text: 'Get started', link: '/getting-started' },
           { text: 'Disclaimer', link: '/disclaimer' }
+        ]
+      },
+      {
+        text: 'Stacks',
+        items: [
+          { text: 'Homarr dashboard', link: '/stacks/homarr-dashboard'},
+          { text: 'Synology acme script', link: '/stacks/synology-acme-dns'}
         ]
       }
     ],
@@ -31,7 +38,7 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+      { icon: 'github', link: 'https://github.com/langehm/homelab-compose-stacks' }
     ]
   }
 })

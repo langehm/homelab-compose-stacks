@@ -1,0 +1,88 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+api:
+  dashboard: true
+  # insecure: true # use for debugging only
+
+ping: {}
+
+log:
+  filePath: /logs/traefik.log
+  maxSize: 1
+  maxBackups: 10
+  compress: true
+
+accessLog:
+  filePath: "/logs/access.log"
+  bufferingSize: 100
+  fields:
+    defaultMode: keep
+    names:
+      StartUTC: drop
+
+metrics:
+  otlp:
+    addRoutersLabels: true
+  prometheus:
+    addRoutersLabels: true
+
+tracing:
+  serviceName: "traefik"
+  otlp: {}
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+
+  websecure:
+    address: ":443"
+    http:
+      tls:
+        certResolver: myresolver
+        domains:
+          - main: example.com
+            sans:
+              - "*.example.com"
+              - "*.pages.example.com"
+
+serversTransport:
+  insecureSkipVerify: true # change to encrypt proxy <-> containers
+
+providers:
+  docker:
+    watch: true
+    exposedByDefault: false
+    allowEmptyServices: false
+    useBindPortIP: false
+    network: traefik
+
+  file:
+    watch: true
+    filename: /etc/traefik/dynamic.yml
+
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: "admin@example.com"
+      storage: "/certs/acme.json"
+      keyType: RSA4096
+      dnsChallenge:
+        provider: your_dns_provider
+        propagation:
+          delayBeforeChecks: 180s
+        resolvers:
+          - 1.1.1.1:53
+          - 1.0.0.1:53
+
+experimental:
+  plugins:
+    sablier:
+      moduleName: "[github.com/acouvreur/sablier](https://github.com/acouvreur/sablier)"
+      version: "v1.8.0"

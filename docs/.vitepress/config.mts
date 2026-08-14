@@ -24,7 +24,8 @@ export default defineConfig({
         text: 'Stacks',
         items: [
           { text: 'Homarr dashboard', link: '/stacks/homarr-dashboard'},
-          { text: 'Synology acme script', link: '/stacks/synology-acme-dns'}
+          { text: 'Synology acme script', link: '/stacks/synology-acme-dns'},
+          { text: 'Traefik proxy', link: '/stacks/traefik-proxy'}
         ]
       }
     ],

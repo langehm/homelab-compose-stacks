@@ -1,0 +1,16 @@
+accesscontrolallowmethods=GET, OPTIONS, PUT, POST, PATCH
+accesscontrolmaxage=100
+addvaryheader-true
+hostsproxyheaders=X-Forwarded-Host
+sslredirect=true
+X-Forwarded-Proto=https
+stsseconds=63072000
+stsincludesubdomains=true
+stspreload=true
+forcestsheader=true
+framedeny=true
+contenttypenosniff=true
+browserxssfilter=true
+referrerpolicy=same-origin
+featurepolicy=camera 'none'; geolocation 'none'; microphone 'none'; payment 'none'; usb 'none'; vr 'none';
+customresponseheaders.X-Robots-Tag=none,noarchive,nosnippet,notranslate,noimageindex,

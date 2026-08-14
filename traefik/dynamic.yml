@@ -1,0 +1,120 @@
+tls:
+  options:
+    default:
+      minVersion: VersionTLS12
+      cipherSuites:
+        - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305
+        - TLS_AES_256_GCM_SHA384
+        - TLS_CHACHA20_POLY1305_SHA256
+      curvePreferences:
+        - CurveP521
+        - CurveP384
+      sniStrict: true
+http:
+  routers:
+    pihole:
+      rule: Host(`pihole.example.com`)
+      middlewares:
+        - no-auth@file
+        - pihole-admin-redirect
+      service: pihole
+    nas:
+      rule: Host(`nas.example.com`)
+      middlewares:
+        - no-auth@file
+      service: nas
+    code-server:
+      rule: Host(`vscode.example.com`)
+      middlewares:
+        - sablier-code-server
+      service: code-server-service
+    whoami-router:
+      rule: Host(`whoami.example.com`)
+      service: whoami-service
+      middlewares:
+        - sablier-dynamic@file
+    ollama-webgui:
+      rule: Host(`chat.example.com`)
+      service: ollama-webgui
+      middlewares:
+        - no-auth@file
+
+  services:
+    whoami-service:
+      loadbalancer:
+        servers:
+          - url: http://whoami:80
+    code-server-service:
+      loadbalancer:
+        servers:
+          - url: http://code-server:8443
+    pihole:
+      loadBalancer:
+        servers:
+          - url: "[https://192.168.178.2](https://192.168.178.20)"
+    nas:
+      loadBalancer:
+        servers:
+          - url: "[https://172.17.0.1:1234](https://172.17.0.1:1234)" # Example of using docker host
+    ollama-webgui:
+      loadbalancer:
+        servers:
+          - url: "[https://192.168.178.3:3000](https://192.168.178.26:3000)"
+
+  middlewares:
+    pihole-admin-redirect:
+      redirectRegex:
+        regex: "^(https?://pihole\\.example\\.com)/?$"
+        replacement: "${1}/admin"
+    digest-auth:
+      digestAuth:
+        usersFile: /etc/traefik/auth_users
+        removeHeader: true
+    security-headers:
+      headers:
+        browserXssFilter: true
+        contentTypeNosniff: true
+        customFrameOptionsValue: "SAMEORIGIN"
+    sablier-code-server:
+      plugin:
+        sablier:
+          sablierUrl: http://sablier:10000
+          names: code-server
+          dynamic:
+            displayName: code-server
+    sablier-dynamic:
+      plugin:
+        sablier:
+          sablierUrl: http://sablier:10000
+          sessionDuration: 1m
+          names: whoami,nginx,mariadb
+          dynamic:
+            displayName: whoami
+    error-pages:
+      errors:
+        status:
+          - "404-599"
+        service: error-pages-error-pages@docker
+        query: /{status}.html
+    no-auth:
+      chain:
+        middlewares:
+          - security-headers
+          - error-pages
+    with-auth:
+      chain:
+        middlewares:
+          - digest-auth
+          - no-auth
+    reduced-middleware:
+      chain:
+        middlewares:
+          - security-headers
+          - extended-error-pages
+    extended-error-pages:
+      errors:
+        status:
+          - "400-599"
+        service: traefik-error-pages-traefik-error-pages@docker
+        query: /{status}.html

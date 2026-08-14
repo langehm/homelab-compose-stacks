@@ -1,0 +1,73 @@
+services:
+  traefik-error-pages:
+    image: ghcr.io/tarampampam/error-pages:3.8
+    container_name: traefik-error-pages
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - traefik
+      - error-pages
+    labels:
+      - "autoheal=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.error-pages.rule=HostRegexp(`.+`)"
+      - "traefik.http.routers.error-pages.priority=10"
+      - "traefik.http.routers.error-pages.entrypoints=websecure"
+      - "traefik.http.routers.error-pages.middlewares=no-auth@file"
+      - "traefik.http.services.error-pages-error-pages.loadbalancer.server.port=8080"
+
+  traefik:
+    depends_on:
+      traefik-error-pages:
+        condition: service_healthy
+    image: traefik:3.6.7
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: "wget --no-verbose --tries=1 --spider http://localhost:8080/ping || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8084:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /certs:/certs:rw
+      - /volume2/docker/traefik/config:/etc/traefik:ro
+      - /volume2/docker/traefik/logs:/logs:rw
+    env_file:
+      - /env/traefik.env
+    environment:
+      - TZ=Europe/Berlin
+    networks:
+      traefik:
+        ipv4_address: 172.20.255.254 # ip does not work on auto generated network! Must define subnet etc.
+      error-pages: {}
+    labels:
+      - "autoheal=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`proxy.example.com`)"
+      - "traefik.http.routers.traefik.middlewares=no-auth@file"
+      - "traefik.http.routers.traefik.service=api@internal"
+
+  sablier:
+    container_name: sablier
+    image: ghcr.io/sablierapp/sablier:1.11.1
+    volumes:
+      - /volume2/docker/traefik/config/sablier.yml:/etc/sablier/sablier.yaml:ro
+      - /volume2/docker/traefik/data/state.json:/etc/sablier/state.json
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    name: traefik
+    external: true
+  error-pages:
+    name: error-pages
